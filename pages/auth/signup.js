@@ -9,6 +9,7 @@ function SignUp () {
   const supabase = createPagesBrowserClient()
   const [emailSent, setEmailSent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const fields = [
     {
@@ -46,19 +47,29 @@ function SignUp () {
 
   // handle submit
   const onSubmit = async formData => {
+    setErrorMessage(null)
     setSubmitting(true)
+
+    // if no user, create them
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
       options: {
         data: {
           name: formData.name
-        }
+        },
+        emailRedirectTo: process.env.NEXT_PUBLIC_ROOT_URL
       }
     })
     if (error) {
+      setErrorMessage(error.message)
+      setSubmitting(false)
       console.log('error', error)
     } else {
+      console.log(data.user.identities.length)
+      if (data.user.identities.length === 0) {
+        setErrorMessage('Email already in use, try signing in instead.')
+      }
       setEmailSent(true)
       setSubmitting(false)
       console.log('data', data)
@@ -78,6 +89,11 @@ function SignUp () {
             icon={submitting ? null : <ChevronRightIcon />}
             submitting={submitting}
           />
+          {errorMessage && (
+            <div className='mt-2'>
+              <Text className='text-red-400'>{errorMessage}</Text>
+            </div>
+          )}
 
           {/* show this message when the account has been created and email sent */}
           {emailSent && (

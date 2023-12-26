@@ -8,6 +8,7 @@ import Form from '@/components/Forms/Form'
 function SignIn () {
   const supabase = createPagesBrowserClient()
   const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const fields = [
     {
@@ -40,6 +41,7 @@ function SignIn () {
 
   // handle submit
   const onSubmit = async formData => {
+    setErrorMessage(null)
     setSubmitting(true)
     const { data, error } = await supabase.auth.signInWithPassword({
       email: formData.email,
@@ -47,6 +49,8 @@ function SignIn () {
     })
     if (error) {
       console.log('error', error)
+      setSubmitting(false)
+      setErrorMessage(error.message)
     } else {
       // setSubmitting(false)
       window.location.href = '/'
@@ -67,6 +71,11 @@ function SignIn () {
             icon={submitting ? null : <ChevronRightIcon />}
             submitting={submitting}
           />
+          {errorMessage && (
+            <div className='mt-2'>
+              <Text className='text-red-400'>{errorMessage}</Text>
+            </div>
+          )}
         </div>
         <Text className='mt-8'>
           Not a user? <TextLink href='/auth/signup'>Sign up here</TextLink>
