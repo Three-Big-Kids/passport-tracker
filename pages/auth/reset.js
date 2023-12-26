@@ -1,10 +1,5 @@
-import {
-  Session,
-  createPagesBrowserClient,
-  createPagesServerClient
-} from '@supabase/auth-helpers-nextjs'
-import { useEffect, useState, useContext } from 'react'
-import { useForm } from 'react-hook-form'
+import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
+import { useState } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/16/solid'
 import { Text, TextLink, Code } from '@/components/Catalyst/text'
 
