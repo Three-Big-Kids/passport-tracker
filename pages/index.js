@@ -9,7 +9,6 @@ import {
 import { Text, TextLink } from '@/components/Catalyst/text'
 
 import Head from 'next/head'
-import { useEffect } from 'react'
 
 import { Button } from '@/components/Catalyst/button'
 
