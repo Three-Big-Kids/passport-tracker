@@ -7,10 +7,11 @@ import {
 } from '@supabase/auth-helpers-react'
 
 import { Text, TextLink } from '@/components/Catalyst/text'
+import { Button } from '@/components/Catalyst/button'
 
 import Head from 'next/head'
 
-import { Button } from '@/components/Catalyst/button'
+import Profile from '@/components/Profile'
 
 const Home = () => {
   // supabase client
@@ -28,7 +29,7 @@ const Home = () => {
   return (
     <div className='container mx-auto'>
       <Head>
-        <title>3bk Auth boilerplate</title>
+        <title>Passport tracker</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
@@ -36,7 +37,7 @@ const Home = () => {
         {/* loading */}
         {sessionContext.isLoading && <div>loading</div>}
 
-        {/* user is logged in */}
+        {/* no user */}
         {!sessionContext.isLoading && !session && (
           <div className='flex flex-col max-w-sm gap-4 mx-auto'>
             <h1 className='text-2xl font-medium'>Hello!</h1>
@@ -53,11 +54,13 @@ const Home = () => {
           </div>
         )}
 
-        {/* no user */}
+        {/* user is logged in */}
         {!sessionContext.isLoading && session && session.user && (
           <div className='flex flex-col max-w-sm gap-4 mx-auto'>
             <h1 className='text-2xl font-medium'>Welcome back!</h1>
-            <Text>You are logged in as {user?.email}</Text>
+            <Text>You are logged in as {user.email}</Text>
+
+            <Profile userId={user.id} />
 
             <div className='flex flex-col gap-2'>
               <Button className='w-full' onClick={handleSignOut}>
